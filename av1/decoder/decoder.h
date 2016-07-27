@@ -90,6 +90,7 @@ typedef struct AV1Decoder {
 #if CONFIG_ACCOUNTING
   Accounting accounting;
 #endif
+  AnalyzerData *analyzer_data;
 } AV1Decoder;
 
 int av1_receive_compressed_data(struct AV1Decoder *pbi, size_t size,
