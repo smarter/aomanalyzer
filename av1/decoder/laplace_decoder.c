@@ -33,18 +33,25 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.*/
 #include "av1/common/pvq.h"
 
 static int od_decode_pvq_split(od_ec_dec *ec, od_pvq_codeword_ctx *adapt,
- int sum, int ctx) {
+  int sum, int ctx, int band_n) {
   int shift;
   int count;
   int msbs;
   int fctx;
+  char *str_msb, *str_rest;
+
+  str_msb = malloc(sizeof("pvq:k_msb") + 10);
+  sprintf(str_msb, "pvq:k_msb__%d", band_n);
+  str_rest = malloc(sizeof("pvq:k_rest") + 10);
+  sprintf(str_rest, "pvq:k_rest__%d", band_n);
+
   count = 0;
   if (sum == 0) return 0;
   shift = OD_MAXI(0, OD_ILOG(sum) - 3);
   fctx = 7*ctx + (sum >> shift) - 1;
   msbs = od_decode_cdf_adapt(ec, adapt->pvq_split_cdf[fctx],
-   (sum >> shift) + 1, adapt->pvq_split_increment, "pvq:k_msb");
-  if (shift) count = od_ec_dec_bits(ec, shift, "pvq:k_rest");
+   (sum >> shift) + 1, adapt->pvq_split_increment, str_msb);
+  if (shift) count = od_ec_dec_bits(ec, shift, str_rest);
   count += msbs << shift;
   if (count > sum) {
     count = sum;
@@ -54,7 +61,7 @@ static int od_decode_pvq_split(od_ec_dec *ec, od_pvq_codeword_ctx *adapt,
 }
 
 void od_decode_band_pvq_splits(od_ec_dec *ec, od_pvq_codeword_ctx *adapt,
- od_coeff *y, int n, int k, int level) {
+ od_coeff *y, int n, int k, int level, int band_n) {
   int mid;
   int count_right;
   if (n == 1) {
@@ -74,10 +81,10 @@ void od_decode_band_pvq_splits(od_ec_dec *ec, od_pvq_codeword_ctx *adapt,
   }
   else {
     mid = n >> 1;
-    count_right = od_decode_pvq_split(ec, adapt, k, od_pvq_size_ctx(n));
-    od_decode_band_pvq_splits(ec, adapt, y, mid, k - count_right, level + 1);
+    count_right = od_decode_pvq_split(ec, adapt, k, od_pvq_size_ctx(n), band_n);
+    od_decode_band_pvq_splits(ec, adapt, y, mid, k - count_right, level + 1, band_n);
     od_decode_band_pvq_splits(ec, adapt, y + mid, n - mid, count_right,
-     level + 1);
+     level + 1, band_n);
   }
 }
 

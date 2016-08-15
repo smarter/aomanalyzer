@@ -40,7 +40,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.*/
 static void od_decode_pvq_codeword(od_ec_dec *ec, od_pvq_codeword_ctx *ctx,
  od_coeff *y, int n, int k) {
   int i;
-  od_decode_band_pvq_splits(ec, ctx, y, n, k, 0);
+  od_decode_band_pvq_splits(ec, ctx, y, n, k, 0, n);
   for (i = 0; i < n; i++) {
     if (y[i] && od_ec_dec_bits(ec, 1, "pvq:sign")) y[i] = -y[i];
   }

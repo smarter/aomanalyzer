@@ -29,7 +29,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.*/
 # include "aom_dsp/entdec.h"
 
 void od_decode_band_pvq_splits(od_ec_dec *ec, od_pvq_codeword_ctx *adapt,
- od_coeff *y, int n, int k, int level);
+ od_coeff *y, int n, int k, int level, int band_n);
 
 #if OD_ACCOUNTING
 # define laplace_decode_special(dec, decay, max, str) laplace_decode_special_(dec, decay, max, str)
