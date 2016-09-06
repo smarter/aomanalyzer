@@ -536,6 +536,7 @@ static void decode_block(AV1Decoder *const pbi, MACROBLOCKD *const xd,
 #endif  // CONFIG_MOTION_VAR
 
     // Save predicted blocks.
+    /*
     for (int plane = 0; plane < MAX_MB_PLANE; ++plane) {
       const struct macroblockd_plane *const pd = &xd->plane[plane];
 
@@ -562,6 +563,7 @@ static void decode_block(AV1Decoder *const pbi, MACROBLOCKD *const xd,
         }
       }
     }
+    */
 
     // Reconstruction
     if (!mbmi->skip) {
