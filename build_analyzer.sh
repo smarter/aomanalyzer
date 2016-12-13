@@ -12,5 +12,7 @@ emcc -O3 examples/analyzer_decoder.bc -o examples/decoder.js -s TOTAL_MEMORY=134
 cd ..
 mkdir -p ins/bin
 cp asm/examples/decoder.js ins/bin/decoder.js
+cd ins
 tsc
+cd ..
 echo Analyzer is ready, serve it from the ins directory using your favorite web server. E.g. 'cd ins && python -m SimpleHTTPServer'
